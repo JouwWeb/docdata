@@ -242,8 +242,6 @@ class DocData
         // make the call
         $this->logger->info("Payment create: " . $paymentId, ['requestObject' => $request->toArray()]);
         $response = $this->soap('create', [$request->toArray()]);
-        $this->logger->info("Payment create soap request: " . $paymentId,
-            ['request' => $this->soapClient->__getLastRequest()]);
         $this->logger->info("Payment create soap response: " . $paymentId,
             ['response' => $this->soapClient->__getLastResponse()]);
 
@@ -293,8 +291,6 @@ class DocData
         // make the call
         $this->logger->info("Payment start: " . $orderKey, ['requestObject' => $request->toArray()]);
         $response = $this->soap('start', [$request->toArray()]);
-        $this->logger->info("Payment start soap request: " . $orderKey,
-            ['request' => $this->soapClient->__getLastRequest()]);
         $this->logger->info("Payment start soap response: " . $orderKey,
             ['response' => $this->soapClient->__getLastResponse()]);
 
@@ -336,8 +332,6 @@ class DocData
 
         $this->logger->info("Payment cancel: " . $paymentOrderKey, ['requestObject' => $request->toArray()]);
         $response = $this->soap('cancel', [$request->toArray()]);
-        $this->logger->info("Payment cancel soap request: " . $paymentOrderKey,
-            ['request' => $this->soapClient->__getLastRequest()]);
         $this->logger->info("Payment cancel soap response: " . $paymentOrderKey,
             ['response' => $this->soapClient->__getLastResponse()]);
 
@@ -420,8 +414,6 @@ class DocData
 
         $this->logger->info("Payment capture: " . $merchantCaptureReference, ['request' => $request->toArray()]);
         $response = $this->soap('capture', [$request->toArray()]);
-        $this->logger->info("Payment capture soap request: " . $merchantCaptureReference,
-            ['request' => $this->soapClient->__getLastRequest()]);
         $this->logger->info("Payment capture soap response: " . $merchantCaptureReference,
             ['response' => $this->soapClient->__getLastResponse()]);
 
@@ -498,8 +490,6 @@ class DocData
         // make the call
         $this->logger->info("Payment capture: " . $merchantRefundReference, ['request' => $request->toArray()]);
         $response = $this->soap('refund', [$request->toArray()]);
-        $this->logger->info("Payment capture soap request: " . $merchantRefundReference,
-            ['request' => $this->soapClient->__getLastRequest()]);
         $this->logger->info("Payment capture soap response: " . $merchantRefundReference,
             ['response' => $this->soapClient->__getLastResponse()]);
 
@@ -545,8 +535,6 @@ class DocData
 
         /** @var StatusResponse $response */
         $response = $this->soap('status', [$request->toArray()]);
-        $this->logger->info("Payment status soap request: " . $paymentOrderKey,
-            ['request' => $this->soapClient->__getLastRequest()]);
         $this->logger->info("Payment status soap response: " . $paymentOrderKey,
             ['response' => $this->soapClient->__getLastResponse()]);
 
