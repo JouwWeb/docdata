@@ -1,5 +1,5 @@
 {
-    "name": "roelvanduijnhoven/docdata",
+    "name": "jouwweb/docdata",
     "description": "PHP wrapper around DocData's API.",
     "type": "library",
     "keywords": [
