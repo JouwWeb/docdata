@@ -412,7 +412,7 @@ class DocData
 
         // make the call
 
-        $this->logger->info("Payment capture: " . $merchantCaptureReference, ['request' => $request->toArray()]);
+        $this->logger->info("Payment capture: " . $merchantCaptureReference, ['requestObject' => $this->createLoggableRequest($request)]);
         $response = $this->soap('capture', [$request->toArray()]);
         $this->logger->info("Payment capture soap response: " . $merchantCaptureReference,
             ['response' => $this->soapClient->__getLastResponse()]);
@@ -488,7 +488,7 @@ class DocData
         }
 
         // make the call
-        $this->logger->info("Payment capture: " . $merchantRefundReference, ['request' => $request->toArray()]);
+        $this->logger->info("Payment capture: " . $merchantRefundReference, ['requestObject' => $this->createLoggableRequest($request)]);
         $response = $this->soap('refund', [$request->toArray()]);
         $this->logger->info("Payment capture soap response: " . $merchantRefundReference,
             ['response' => $this->soapClient->__getLastResponse()]);
