@@ -240,7 +240,7 @@ class DocData
         }
 
         // make the call
-        $this->logger->info("Payment create: " . $paymentId, ['requestObject' => $request->toArray()]);
+        $this->logger->info("Payment create: " . $paymentId, ['requestObject' => $this->createLoggableRequest($request)]);
         $response = $this->soap('create', [$request->toArray()]);
         $this->logger->info("Payment create soap response: " . $paymentId,
             ['response' => $this->soapClient->__getLastResponse()]);
@@ -289,7 +289,7 @@ class DocData
         }
 
         // make the call
-        $this->logger->info("Payment start: " . $orderKey, ['requestObject' => $request->toArray()]);
+        $this->logger->info("Payment start: " . $orderKey, ['requestObject' => $this->createLoggableRequest($request)]);
         $response = $this->soap('start', [$request->toArray()]);
         $this->logger->info("Payment start soap response: " . $orderKey,
             ['response' => $this->soapClient->__getLastResponse()]);
@@ -330,7 +330,7 @@ class DocData
 
         // make the call
 
-        $this->logger->info("Payment cancel: " . $paymentOrderKey, ['requestObject' => $request->toArray()]);
+        $this->logger->info("Payment cancel: " . $paymentOrderKey, ['requestObject' => $this->createLoggableRequest($request)]);
         $response = $this->soap('cancel', [$request->toArray()]);
         $this->logger->info("Payment cancel soap response: " . $paymentOrderKey,
             ['response' => $this->soapClient->__getLastResponse()]);
@@ -531,7 +531,7 @@ class DocData
         $request->setPaymentOrderKey($paymentOrderKey);
 
         // make the call
-        $this->logger->info("Payment status: " . $paymentOrderKey, ['requestObject' => $request->toArray()]);
+        $this->logger->info("Payment status: " . $paymentOrderKey, ['requestObject' => $this->createLoggableRequest($request)]);
 
         /** @var StatusResponse $response */
         $response = $this->soap('status', [$request->toArray()]);
@@ -785,5 +785,20 @@ class DocData
         }
 
         return $this->soapClient;
+    }
+
+    /**
+     * @param $request AbstractRequest
+     * @return array
+     */
+    protected function createLoggableRequest($request)
+    {
+        $representation = $request->toArray();
+
+        if (isset($representation['merchant']['password'])) {
+            $representation['merchant']['password'] = 'XXXXXX';
+        }
+
+        return $representation;
     }
 }

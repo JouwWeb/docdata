@@ -5,6 +5,8 @@ namespace JouwWeb\DocData\Tests;
 use JouwWeb\DocData\DocData;
 use JouwWeb\DocData\Type;
 
+use Psr\Log\LoggerInterface;
+
 class DocDataTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -12,9 +14,19 @@ class DocDataTest extends \PHPUnit_Framework_TestCase
      */
     private $apiClient;
 
+    /**
+     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $logger;
+
     protected function setUp()
     {
-        $this->apiClient = new DocData(MERCHANT_NAME, MERCHANT_PASSWORD, true);
+        $this->apiClient = new DocData(
+            MERCHANT_NAME, 
+            MERCHANT_PASSWORD, 
+            true,
+            $this->logger = $this->getMockBuilder(LoggerInterface::class)->getMock()
+        );
     }
 
     public function testSettersGetters()
@@ -62,6 +74,15 @@ class DocDataTest extends \PHPUnit_Framework_TestCase
         $paymentPreferences = new Type\PaymentPreferences();
         $paymentPreferences->setProfile('standard');
         $paymentPreferences->setNumberOfDaysToPay(4);
+
+        $this
+            ->logger
+            ->expects($this->any())
+            ->method('info')
+            ->with($this->anything(), $this->callback(function ($message) {
+                $representation = serialize($message);
+                return stripos($representation, MERCHANT_PASSWORD) === false;
+            }));
 
         $response = $this->apiClient->create(
             microtime(),
