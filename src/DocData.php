@@ -2,6 +2,7 @@
 
 namespace JouwWeb\DocData;
 
+use JouwWeb\DocData\Type\AbstractRequest;
 use JouwWeb\DocData\Type\ApproximateTotals;
 use JouwWeb\DocData\Type\PaymentPreferences;
 use JouwWeb\DocData\Type\StatusResponse;
@@ -726,7 +727,7 @@ class DocData
 
             //Balanced Route
             if ($approximateTotals->getTotalRegistered() ==
-                $approximateTotals->gettotalAcquirerApproved()
+                $approximateTotals->getTotalAcquirerApproved()
             ) {
                 return Type\PaidLevel::BalancedRoute;
             }
@@ -735,7 +736,7 @@ class DocData
             if ($approximateTotals->getTotalRegistered() ==
                 ($approximateTotals->getTotalShopperPending()
                     + $approximateTotals->getTotalAcquirerPending()
-                    + $approximateTotals->gettotalAcquirerApproved())
+                    + $approximateTotals->getTotalAcquirerApproved())
             ) {
                 return Type\PaidLevel::QuickRoute;
             }
@@ -775,10 +776,13 @@ class DocData
             $options = [
                 'trace'              => true,
                 'exceptions'         => true,
-                'connection_timeout' => $this->getTimeout(),
+                'connection_timeout' => $this->getTimeOut(),
                 'user_agent'         => $this->getUserAgent(),
                 'cache_wsdl'         => $this->test ? WSDL_CACHE_NONE : WSDL_CACHE_BOTH,
                 'classmap'           => $this->classMaps,
+                // Don't reuse the connection to prevent the default_socket_timeout INI option from forcibly closing it
+                // before the timeout is reached.
+                'keep_alive'         => false,
             ];
 
             $this->soapClient = new \SoapClient($this->getWsdl(), $options);
